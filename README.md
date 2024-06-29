@@ -21,5 +21,10 @@ Build
 ## Connect DB
 
 - publish repo
-- link
-- create db in Vercel
+- link it in vercel (new project linked to that repo) and deploy
+
+### create db in Vercel
+
+- go to Storage and create Database (Postgres)
+- get connection to it - go to .env.local and copy its content (first click on show secret!)
+- paste it into `.env.local` file in a root directory
