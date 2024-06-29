@@ -6,10 +6,20 @@ Created project using `create-next-app` with all default settings (+ enable tail
 
 # Use
 
+Fork repository. Then:
+
 Run locally
-nmp install
-npm run dev
+
+    nmp install
+    npm run dev
 
 Build
-npm run build
-npm start
+
+    npm run build
+    npm start
+
+## Connect DB
+
+- publish repo
+- link
+- create db in Vercel
