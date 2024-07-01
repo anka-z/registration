@@ -1,14 +1,15 @@
-import { sql } from "@vercel/postgres";
-
+"use client";
+import { getData } from "@/server-actions/queries";
+import { useState, useEffect } from "react";
 export default function ListTables() {
-  async function getData() {
-    "use server";
-    const res =
-      await sql`SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'`;
-    return res.rows.map((row) => row.table_name).join(", ");
-  }
+  const [tables, setTables] = useState("----");
+  useEffect(() => {
+    const run = async () => {
+      const res = await getData();
+      setTables(res);
+    };
+    run();
+  }, []);
 
-  console.log(getData());
-
-  return <div>{getData()}</div>;
+  return <div>{tables}</div>;
 }
