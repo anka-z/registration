@@ -1,7 +1,6 @@
 "use server";
 import { sql } from "@vercel/postgres";
 
-// Define the missing types
 interface Registration {
   id: number;
   name: string;
@@ -21,7 +20,7 @@ interface Event {
 interface EventWithRegistrations {
   eventId: number;
   title: string;
-  registrations: Omit<Registration, 'event_id'>[];
+  registrations: Registration[];
 }
 
 interface RegistrationData {
@@ -45,7 +44,8 @@ export async function fetchRegistrations(): Promise<EventWithRegistrations[]> {
       registrations.id, 
       registrations.name, 
       registrations.surname, 
-      registrations.email 
+      registrations.email,
+      registrations.event_id 
     FROM registrations 
     JOIN events ON registrations.event_id = events.id
   `;
@@ -55,7 +55,7 @@ export async function fetchRegistrations(): Promise<EventWithRegistrations[]> {
     if (!acc[event_id]) {
       acc[event_id] = { eventId: event_id, title, registrations: [] };
     }
-    acc[event_id].registrations.push(registration);
+    acc[event_id].registrations.push({ ...registration, event_id });
     return acc;
   }, {} as Record<number, EventWithRegistrations>);
 
@@ -67,10 +67,10 @@ export async function deleteRegistration(registrationId: number): Promise<void> 
 }
 
 export async function updateRegistration(registrationId: number, updatedData: Partial<Registration>): Promise<void> {
-  const { name, surname, email } = updatedData;
+  const { name, surname, email, event_id } = updatedData;
   await sql`
     UPDATE registrations 
-    SET name = ${name}, surname = ${surname}, email = ${email} 
+    SET name = ${name}, surname = ${surname}, email = ${email}, event_id = ${event_id}
     WHERE id = ${registrationId}
   `;
 }
