@@ -42,7 +42,7 @@ const RegistrationForm = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     await registerForEvent(form);
-    setMessage('Registration successful!');
+    setMessage('Rejestracja powiodła się!');
     setSubmitted(true);
   };
 
