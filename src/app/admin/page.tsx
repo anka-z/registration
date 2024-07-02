@@ -52,12 +52,25 @@ const AdminPanel = () => {
     await updateRegistration(registrationId, updatedData);
 
     setRegistrations(prevRegistrations => {
-      const updatedRegistrations = prevRegistrations.map(event => ({
+      let updatedRegistrations = prevRegistrations.map(event => ({
         ...event,
-        registrations: event.registrations.map(r =>
-          r.id === registrationId ? { ...r, ...updatedData } : r
-        )
+        registrations: event.registrations.filter(r => r.id !== registrationId)
       }));
+
+      const eventIndex = updatedRegistrations.findIndex(event => event.eventId === updatedData.event_id);
+      if (eventIndex !== -1) {
+        updatedRegistrations[eventIndex].registrations.push({ id: registrationId, ...updatedData } as Registration);
+      } else {
+        const newEvent = events.find(e => e.id === updatedData.event_id);
+        if (newEvent) {
+          updatedRegistrations.push({
+            eventId: newEvent.id,
+            title: newEvent.title,
+            registrations: [{ id: registrationId, ...updatedData } as Registration]
+          });
+        }
+      }
+
       return updatedRegistrations;
     });
   };
@@ -97,7 +110,7 @@ const AdminPanel = () => {
         setEditMode({ ...editMode, [registrationId]: false });
       }
     } catch (error) {
-      console.error("Error updating registration:", error);
+      console.error("Błąd aktualizacji rejestracji:", error);
     }
   };
 
