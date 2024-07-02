@@ -5,8 +5,8 @@ export default function App() {
   return (
     <div className="container m-4">
       <Navbar />
-      <h1>Test</h1>
-      <h2>What tables do you have in your database?</h2>
+      <h1>Małopolska Noc Naukowców</h1>
+      <p>Zapraszamy do rejestracji na nasze wydarzenia!</p>
       <ListTables />
     </div>
   );
