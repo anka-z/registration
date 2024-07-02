@@ -21,7 +21,7 @@ interface EventWithRegistrations {
 const AdminPanel = () => {
   const [registrations, setRegistrations] = useState<EventWithRegistrations[]>([]);
   const [editMode, setEditMode] = useState<{ [key: number]: boolean }>({});
-  const [editForm, setEditForm] = useState<Partial<Registration>>({});
+  const [editForm, setEditForm] = useState<{ [key: number]: Partial<Registration> }>({});
   const [events, setEvents] = useState<{ id: number; title: string }[]>([]);
 
   useEffect(() => {
@@ -40,55 +40,64 @@ const AdminPanel = () => {
 
   const handleDelete = async (registrationId: number) => {
     await deleteRegistration(registrationId);
-    setRegistrations(registrations.map(event => ({
-      ...event,
-      registrations: event.registrations.filter(r => r.id !== registrationId)
-    })));
+    setRegistrations(prevRegistrations =>
+      prevRegistrations.map(event => ({
+        ...event,
+        registrations: event.registrations.filter(r => r.id !== registrationId)
+      }))
+    );
   };
 
   const handleUpdate = async (registrationId: number, updatedData: Partial<Registration>) => {
     await updateRegistration(registrationId, updatedData);
 
-    setRegistrations((prevRegistrations) => {
-      let updatedRegistrations = prevRegistrations.map(event => ({
+    setRegistrations(prevRegistrations => {
+      const updatedRegistrations = prevRegistrations.map(event => ({
         ...event,
-        registrations: event.registrations.filter(r => r.id !== registrationId)
+        registrations: event.registrations.map(r =>
+          r.id === registrationId ? { ...r, ...updatedData } : r
+        )
       }));
-
-      const eventIndex = updatedRegistrations.findIndex(event => event.eventId === updatedData.event_id);
-      if (eventIndex !== -1) {
-        updatedRegistrations[eventIndex].registrations.push({ id: registrationId, ...updatedData } as Registration);
-      } else {
-        const newEvent = events.find(e => e.id === updatedData.event_id);
-        if (newEvent) {
-          updatedRegistrations.push({
-            eventId: newEvent.id,
-            title: newEvent.title,
-            registrations: [{ id: registrationId, ...updatedData } as Registration]
-          });
-        }
-      }
-
       return updatedRegistrations;
     });
   };
 
   const handleEditClick = (registration: Registration) => {
-    setEditForm(registration);
+    setEditForm({
+      ...editForm,
+      [registration.id]: {
+        name: registration.name,
+        surname: registration.surname,
+        email: registration.email,
+        event_id: registration.event_id
+      }
+    });
     setEditMode({ ...editMode, [registration.id]: true });
   };
 
-  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleFormChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    registrationId: number
+  ) => {
     const { name, value } = e.target;
-    setEditForm({ ...editForm, [name]: value });
+    setEditForm(prevEditForm => ({
+      ...prevEditForm,
+      [registrationId]: {
+        ...prevEditForm[registrationId],
+        [name]: value
+      }
+    }));
   };
 
   const handleSaveClick = async (registrationId: number) => {
     try {
-      await handleUpdate(registrationId, editForm);
-      setEditMode({ ...editMode, [registrationId]: false });
+      const updatedData = editForm[registrationId];
+      if (updatedData) {
+        await handleUpdate(registrationId, updatedData);
+        setEditMode({ ...editMode, [registrationId]: false });
+      }
     } catch (error) {
-      console.error("Błąd podczas aktualizacji rejestracji:", error);
+      console.error("Error updating registration:", error);
     }
   };
 
@@ -122,8 +131,8 @@ const AdminPanel = () => {
                         <input
                           type="text"
                           name="name"
-                          value={editForm.name || ''}
-                          onChange={handleFormChange}
+                          value={editForm[registration.id]?.name || ''}
+                          onChange={(e) => handleFormChange(e, registration.id)}
                           className="form-control"
                         />
                       </td>
@@ -131,8 +140,8 @@ const AdminPanel = () => {
                         <input
                           type="text"
                           name="surname"
-                          value={editForm.surname || ''}
-                          onChange={handleFormChange}
+                          value={editForm[registration.id]?.surname || ''}
+                          onChange={(e) => handleFormChange(e, registration.id)}
                           className="form-control"
                         />
                       </td>
@@ -140,16 +149,16 @@ const AdminPanel = () => {
                         <input
                           type="email"
                           name="email"
-                          value={editForm.email || ''}
-                          onChange={handleFormChange}
+                          value={editForm[registration.id]?.email || ''}
+                          onChange={(e) => handleFormChange(e, registration.id)}
                           className="form-control"
                         />
                       </td>
                       <td>
                         <select
                           name="event_id"
-                          value={editForm.event_id || ''}
-                          onChange={handleFormChange}
+                          value={editForm[registration.id]?.event_id || ''}
+                          onChange={(e) => handleFormChange(e, registration.id)}
                           className="form-control"
                         >
                           {events.map(event => (
