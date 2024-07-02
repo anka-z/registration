@@ -84,8 +84,12 @@ const AdminPanel = () => {
   };
 
   const handleSaveClick = async (registrationId: number) => {
-    await handleUpdate(registrationId, editForm);
-    setEditMode({ ...editMode, [registrationId]: false });
+    try {
+      await handleUpdate(registrationId, editForm);
+      setEditMode({ ...editMode, [registrationId]: false });
+    } catch (error) {
+      console.error("Błąd podczas aktualizacji rejestracji:", error);
+    }
   };
 
   const handleCancelClick = (registrationId: number) => {
@@ -105,6 +109,7 @@ const AdminPanel = () => {
                 <th>Imię</th>
                 <th>Nazwisko</th>
                 <th>Email</th>
+                <th>Wydarzenie</th>
                 <th>Zarządzaj</th>
               </tr>
             </thead>
@@ -174,6 +179,7 @@ const AdminPanel = () => {
                       <td>{registration.name}</td>
                       <td>{registration.surname}</td>
                       <td>{registration.email}</td>
+                      <td>{event.title}</td>
                       <td>
                         <button
                           className="btn btn-warning"
