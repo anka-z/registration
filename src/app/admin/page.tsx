@@ -98,7 +98,7 @@ const AdminPanel = () => {
   return (
     <div className="container mt-4">
       <Navbar />
-      <h2>Zarządzaj rejestracją</h2>
+      <h2 className="my-5">Zarządzaj rejestracją</h2>
       {registrations.map(event => (
         <div key={event.eventId} className="my-4">
           <h3>{event.title}</h3>

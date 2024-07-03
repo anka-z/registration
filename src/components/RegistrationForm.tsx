@@ -51,7 +51,7 @@ const RegistrationForm = () => {
 
   return (
     <div className="container">
-      <h2>Formularz rejestracji</h2>
+      <h2 className="my-5">Formularz rejestracji</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="name">Imię</label>

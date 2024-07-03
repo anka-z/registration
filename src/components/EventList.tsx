@@ -27,7 +27,7 @@ const EventList = () => {
 
   return (
     <div>
-      <h2>Wydarzenia</h2>
+      <h2 className="my-5">Wydarzenia</h2>
       <div className="row">
         {events.map(event => (
           <div key={event.id} className="col-sm-6 mb-3 mb-sm-0">
