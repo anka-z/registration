@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { fetchRegistrations, deleteRegistration, updateRegistration, fetchEvents, Event, Registration } from '@/server-actions/queries';
 import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 
 interface EventWithRegistrations {
   eventId: number;
@@ -143,6 +144,7 @@ const AdminPanel = () => {
                         />
                       </td>
                       <td>
+                      <div className="d-grid gap-2 d-md-flex">
                         <button
                           className="btn btn-success mr-2"
                           onClick={() => handleUpdate(registration.id, editForm[registration.id] || {})}
@@ -155,6 +157,7 @@ const AdminPanel = () => {
                         >
                           Anuluj
                         </button>
+                        </div>
                       </td>
                     </>
                   ) : (
@@ -163,6 +166,7 @@ const AdminPanel = () => {
                       <td>{registration.surname}</td>
                       <td>{registration.email}</td>
                       <td>
+                        <div className="d-grid gap-2 d-md-flex">
                         <button
                           className="btn btn-primary mr-2"
                           onClick={() => handleEditClick(registration)}
@@ -175,6 +179,7 @@ const AdminPanel = () => {
                         >
                           Usuń
                         </button>
+                        </div>
                       </td>
                     </>
                   )}
@@ -184,6 +189,7 @@ const AdminPanel = () => {
           </table>
         </div>
       ))}
+      <Footer />
     </div>
   );
 };

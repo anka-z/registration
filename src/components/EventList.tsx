@@ -1,7 +1,5 @@
 'use client';
 
-// src/components/EventList.tsx
-
 import { useEffect, useState } from 'react';
 import { fetchEvents } from '@/server-actions/queries';
 
