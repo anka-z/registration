@@ -1,7 +1,7 @@
 "use server";
 import { sql } from "@vercel/postgres";
 
-interface Registration {
+export interface Registration {
   id: number;
   name: string;
   surname: string;
@@ -9,51 +9,80 @@ interface Registration {
   event_id: number;
 }
 
-interface Event {
+export interface Event {
   id: number;
   title: string;
   start_time: string;
   description: string;
   visitor_limit: number;
+  currentRegistrations: number; 
 }
 
-interface EventWithRegistrations {
+export interface EventWithRegistrations {
   eventId: number;
   title: string;
+  visitorLimit: number;
+  currentRegistrations: number; 
   registrations: Registration[];
 }
 
-interface RegistrationData {
+export interface RegistrationData {
   name: string;
   surname: string;
   email: string;
   eventId: string;
 }
 
-export async function getData() {
-  const res =
-    await sql`SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'`;
-  return res.rows.map((row) => row.table_name).join(", ");
+export async function fetchEvents(): Promise<Event[]> {
+  const res = await sql`
+    SELECT 
+      e.id, 
+      e.title, 
+      to_char(e.start_time, 'YYYY-MM-DD, HH24:MI') as start_time, 
+      e.description, 
+      e.visitor_limit, 
+      COALESCE(r.currentRegistrations, 0) as currentRegistrations
+    FROM events e
+    LEFT JOIN (
+      SELECT event_id, COUNT(*) as currentRegistrations
+      FROM registrations
+      GROUP BY event_id
+    ) r ON e.id = r.event_id
+  `;
+  return res.rows as Event[];
 }
 
 export async function fetchRegistrations(): Promise<EventWithRegistrations[]> {
   const res = await sql`
     SELECT 
-      events.id as event_id, 
-      events.title, 
-      registrations.id, 
-      registrations.name, 
-      registrations.surname, 
-      registrations.email,
-      registrations.event_id 
-    FROM registrations 
-    JOIN events ON registrations.event_id = events.id
+      e.id as event_id, 
+      e.title, 
+      e.visitor_limit,
+      COALESCE(r.currentRegistrations, 0) as currentRegistrations,
+      reg.id, 
+      reg.name, 
+      reg.surname, 
+      reg.email,
+      reg.event_id 
+    FROM events e
+    LEFT JOIN registrations reg ON e.id = reg.event_id
+    LEFT JOIN (
+      SELECT event_id, COUNT(*) as currentRegistrations
+      FROM registrations
+      GROUP BY event_id
+    ) r ON e.id = r.event_id
   `;
 
   const grouped = res.rows.reduce((acc, row) => {
-    const { event_id, title, ...registration } = row;
+    const { event_id, title, visitor_limit, currentRegistrations, ...registration } = row;
     if (!acc[event_id]) {
-      acc[event_id] = { eventId: event_id, title, registrations: [] };
+      acc[event_id] = { 
+        eventId: event_id, 
+        title, 
+        visitorLimit: visitor_limit,
+        currentRegistrations: currentRegistrations,
+        registrations: [] 
+      };
     }
     acc[event_id].registrations.push({ ...registration, event_id });
     return acc;
@@ -82,15 +111,3 @@ export async function registerForEvent({ name, surname, email, eventId }: Regist
   `;
 }
 
-export async function fetchEvents(): Promise<Event[]> {
-  const res = await sql`
-    SELECT 
-      id, 
-      title, 
-      to_char(start_time, 'YYYY-MM-DD, HH24:MI') as start_time, 
-      description, 
-      visitor_limit 
-    FROM events
-  `;
-  return res.rows as Event[];
-}

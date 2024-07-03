@@ -1,20 +1,14 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { fetchRegistrations, deleteRegistration, updateRegistration, fetchEvents } from '@/server-actions/queries';
+import { fetchRegistrations, deleteRegistration, updateRegistration, fetchEvents, Event, Registration } from '@/server-actions/queries';
 import Navbar from '@/components/Navbar';
-
-interface Registration {
-  id: number;
-  name: string;
-  surname: string;
-  email: string;
-  event_id: number;
-}
 
 interface EventWithRegistrations {
   eventId: number;
   title: string;
+  visitorLimit: number;
+  currentRegistrations: number;
   registrations: Registration[];
 }
 
@@ -22,7 +16,7 @@ const AdminPanel = () => {
   const [registrations, setRegistrations] = useState<EventWithRegistrations[]>([]);
   const [editMode, setEditMode] = useState<{ [key: number]: boolean }>({});
   const [editForm, setEditForm] = useState<{ [key: number]: Partial<Registration> }>({});
-  const [events, setEvents] = useState<{ id: number; title: string }[]>([]);
+  const [events, setEvents] = useState<Event[]>([]);
 
   useEffect(() => {
     async function loadRegistrations() {
@@ -49,6 +43,13 @@ const AdminPanel = () => {
   };
 
   const handleUpdate = async (registrationId: number, updatedData: Partial<Registration>) => {
+    const event = registrations.find(event => event.eventId === updatedData.event_id);
+    
+    if (event && event.registrations.length >= event.visitorLimit) {
+      alert('Osiągnięto limit odwiedzających');
+      return;
+    }
+
     await updateRegistration(registrationId, updatedData);
 
     setRegistrations(prevRegistrations => {
@@ -66,6 +67,8 @@ const AdminPanel = () => {
           updatedRegistrations.push({
             eventId: newEvent.id,
             title: newEvent.title,
+            visitorLimit: newEvent.visitor_limit,
+            currentRegistrations: newEvent.currentRegistrations,
             registrations: [{ id: registrationId, ...updatedData } as Registration]
           });
         }
@@ -119,11 +122,11 @@ const AdminPanel = () => {
   };
 
   return (
-    <div className="container m-4">
+    <div className="container mt-4">
       <Navbar />
       <h2>Zarządzaj rejestracją</h2>
       {registrations.map(event => (
-        <div key={event.eventId}>
+        <div key={event.eventId} className="my-4">
           <h3>{event.title}</h3>
           <table className="table table-striped">
             <thead>
@@ -143,47 +146,34 @@ const AdminPanel = () => {
                       <td>
                         <input
                           type="text"
+                          className="form-control"
                           name="name"
                           value={editForm[registration.id]?.name || ''}
                           onChange={(e) => handleFormChange(e, registration.id)}
-                          className="form-control"
                         />
                       </td>
                       <td>
                         <input
                           type="text"
+                          className="form-control"
                           name="surname"
                           value={editForm[registration.id]?.surname || ''}
                           onChange={(e) => handleFormChange(e, registration.id)}
-                          className="form-control"
                         />
                       </td>
                       <td>
                         <input
                           type="email"
+                          className="form-control"
                           name="email"
                           value={editForm[registration.id]?.email || ''}
                           onChange={(e) => handleFormChange(e, registration.id)}
-                          className="form-control"
                         />
                       </td>
-                      <td>
-                        <select
-                          name="event_id"
-                          value={editForm[registration.id]?.event_id || ''}
-                          onChange={(e) => handleFormChange(e, registration.id)}
-                          className="form-control"
-                        >
-                          {events.map(event => (
-                            <option key={event.id} value={event.id}>
-                              {event.title}
-                            </option>
-                          ))}
-                        </select>
-                      </td>
+                      <td>{events.find(e => e.id === registration.event_id)?.title}</td>
                       <td>
                         <button
-                          className="btn btn-success"
+                          className="btn btn-success mr-2"
                           onClick={() => handleSaveClick(registration.id)}
                         >
                           Zapisz
@@ -201,13 +191,13 @@ const AdminPanel = () => {
                       <td>{registration.name}</td>
                       <td>{registration.surname}</td>
                       <td>{registration.email}</td>
-                      <td>{event.title}</td>
+                      <td>{events.find(e => e.id === registration.event_id)?.title}</td>
                       <td>
                         <button
-                          className="btn btn-warning"
+                          className="btn btn-primary mr-2"
                           onClick={() => handleEditClick(registration)}
                         >
-                          Modyfikuj
+                          Edytuj
                         </button>
                         <button
                           className="btn btn-danger"
