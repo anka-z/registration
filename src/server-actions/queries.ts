@@ -110,4 +110,3 @@ export async function registerForEvent({ name, surname, email, eventId }: Regist
     VALUES (${name}, ${surname}, ${email}, ${eventId})
   `;
 }
-

@@ -1,7 +1,8 @@
 import Link from 'next/link';
 
 const Navbar = () => (
-  <nav className="navbar navbar-expand-lg navbar-light bg-light">
+  <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div className="container-fluid">
     <a className="navbar-brand" href="/">MNN</a>
     <div className="collapse navbar-collapse">
       <ul className="navbar-nav ml-auto">
@@ -18,6 +19,7 @@ const Navbar = () => (
             <Link className="nav-link" href="/admin">Admin</Link>
           </li>
       </ul>
+    </div>
     </div>
   </nav>
 );

@@ -1,21 +1,21 @@
 /* The following block can be included in a custom.scss */
 
-$colors: (
-  "primary-0": #baffd5,
-  "primary-1": #24d467,
-  "primary-2": #00bc60,
-  "primary-3": #408058,
-  "primary-4": #385443,
-  "primary-5": #2a332e,
-  "primary-5-shadow": #2a332e50,
-  "accent": #aa1511,
-);
+// $colors: (
+//   "primary-0": #baffd5,
+//   "primary-1": #24d467,
+//   "primary-2": #00bc60,
+//   "primary-3": #408058,
+//   "primary-4": #385443,
+//   "primary-5": #2a332e,
+//   "primary-5-shadow": #2a332e50,
+//   "accent": #aa1511,
+// );
 /* Bootstrap customization */
-$theme-colors: (
-  "primary": map-get($colors, "primary-3"),
-  "secondary": map-get($colors, "primary-1"),
-  "danger": map-get($colors, "accent"),
-);
+// $theme-colors: (
+//   "primary": map-get($colors, "primary-3"),
+//   "secondary": map-get($colors, "primary-1"),
+//   "danger": map-get($colors, "accent"),
+// );
 
 /* import bootstrap to set changes */
 @import "~bootstrap/scss/bootstrap";

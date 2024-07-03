@@ -1,5 +1,7 @@
 'use client';
 
+// src/components/EventList.tsx
+
 import { useEffect, useState } from 'react';
 import { fetchEvents } from '@/server-actions/queries';
 
@@ -15,8 +17,12 @@ const EventList = () => {
 
   useEffect(() => {
     async function loadEvents() {
-      const data: Event[] = await fetchEvents();
-      setEvents(data);
+      try {
+        const data: Event[] = await fetchEvents();
+        setEvents(data);
+      } catch (error) {
+        console.error('Failed to fetch events:', error);
+      }
     }
     loadEvents();
   }, []);
@@ -24,20 +30,28 @@ const EventList = () => {
   return (
     <div>
       <h2>Wydarzenia</h2>
-      <ul>
+      <div className="row">
         {events.map(event => (
-          <li key={event.id}>
-            <h3>{event.title}</h3>
-            <p>Data: {event.start_time}</p>
-            <p>{event.description}</p>
-          </li>
+          <div key={event.id} className="col-sm-6 mb-3 mb-sm-0">
+            <div className="card">
+              <div className="card-body">
+                <h5 className="card-title">{event.title}</h5>
+                <h6>{event.start_time}</h6>
+                <p className="card-text">{event.description}</p>
+                <a href={`/register/`} className="btn btn-primary">
+                  Zarejestruj
+                </a>
+              </div>
+            </div>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };
 
 export default EventList;
+
 
 
 
