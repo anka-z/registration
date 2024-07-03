@@ -42,12 +42,12 @@ const RegistrationForm = () => {
       return;
     }
     await registerForEvent(form as RegistrationData);
-    setMessage('Zarejestrowano!');
+    setMessage('Zarejestrowano pomyślnie!');
     setSubmitted(true);
   };
 
   if (submitted) {
-    return <p className="alert alert-success my-5">{message}</p>;
+    return <div className="alert alert-success my-5" role="alert">{message}</div>;
   }
 
   return (
@@ -107,7 +107,7 @@ const RegistrationForm = () => {
                 value={event.id} 
                 disabled={event.currentregistrations >= event.visitor_limit}
               >
-                {event.title} {event.currentregistrations >= event.visitor_limit ? '(Limit osiągnięty)' : ''}
+                {event.title} {event.currentregistrations >= event.visitor_limit ? '(Brak miejsc)' : ''}
               </option>
             ))}
           </select>
