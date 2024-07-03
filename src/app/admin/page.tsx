@@ -43,7 +43,7 @@ const AdminPanel = () => {
   };
 
   const handleUpdate = async (registrationId: number, updatedData: Partial<Registration>) => {
-    const event = registrations.find(event => event.eventId === updatedData.event_id);
+    const event = registrations.find(event => event.registrations.some(r => r.id === registrationId));
     
     if (event && event.registrations.length >= event.visitorLimit) {
       alert('Osiągnięto limit odwiedzających');
@@ -55,27 +55,15 @@ const AdminPanel = () => {
     setRegistrations(prevRegistrations => {
       let updatedRegistrations = prevRegistrations.map(event => ({
         ...event,
-        registrations: event.registrations.filter(r => r.id !== registrationId)
+        registrations: event.registrations.map(r => 
+          r.id === registrationId ? { ...r, ...updatedData } : r
+        )
       }));
-
-      const eventIndex = updatedRegistrations.findIndex(event => event.eventId === updatedData.event_id);
-      if (eventIndex !== -1) {
-        updatedRegistrations[eventIndex].registrations.push({ id: registrationId, ...updatedData } as Registration);
-      } else {
-        const newEvent = events.find(e => e.id === updatedData.event_id);
-        if (newEvent) {
-          updatedRegistrations.push({
-            eventId: newEvent.id,
-            title: newEvent.title,
-            visitorLimit: newEvent.visitor_limit,
-            currentRegistrations: newEvent.currentRegistrations,
-            registrations: [{ id: registrationId, ...updatedData } as Registration]
-          });
-        }
-      }
 
       return updatedRegistrations;
     });
+
+    setEditMode({ ...editMode, [registrationId]: false });
   };
 
   const handleEditClick = (registration: Registration) => {
@@ -105,18 +93,6 @@ const AdminPanel = () => {
     }));
   };
 
-  const handleSaveClick = async (registrationId: number) => {
-    try {
-      const updatedData = editForm[registrationId];
-      if (updatedData) {
-        await handleUpdate(registrationId, updatedData);
-        setEditMode({ ...editMode, [registrationId]: false });
-      }
-    } catch (error) {
-      console.error("Błąd aktualizacji rejestracji:", error);
-    }
-  };
-
   const handleCancelClick = (registrationId: number) => {
     setEditMode({ ...editMode, [registrationId]: false });
   };
@@ -134,7 +110,6 @@ const AdminPanel = () => {
                 <th>Imię</th>
                 <th>Nazwisko</th>
                 <th>Email</th>
-                <th>Wydarzenie</th>
                 <th>Zarządzaj</th>
               </tr>
             </thead>
@@ -170,11 +145,10 @@ const AdminPanel = () => {
                           onChange={(e) => handleFormChange(e, registration.id)}
                         />
                       </td>
-                      <td>{events.find(e => e.id === registration.event_id)?.title}</td>
                       <td>
                         <button
                           className="btn btn-success mr-2"
-                          onClick={() => handleSaveClick(registration.id)}
+                          onClick={() => handleUpdate(registration.id, editForm[registration.id] || {})}
                         >
                           Zapisz
                         </button>
@@ -191,7 +165,6 @@ const AdminPanel = () => {
                       <td>{registration.name}</td>
                       <td>{registration.surname}</td>
                       <td>{registration.email}</td>
-                      <td>{events.find(e => e.id === registration.event_id)?.title}</td>
                       <td>
                         <button
                           className="btn btn-primary mr-2"
@@ -219,3 +192,4 @@ const AdminPanel = () => {
 };
 
 export default AdminPanel;
+
