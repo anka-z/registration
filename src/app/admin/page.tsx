@@ -13,13 +13,13 @@ import Footer from "@/components/Footer";
 
 // Define the username and password
 const username = "admin";
-const password = "admin";
+const password = "password";
 
 interface EventWithRegistrations {
   eventId: number;
   title: string;
   visitorLimit: number;
-  currentRegistrations: number;
+  currentregistrations: number;
   registrations: Registration[];
 }
 

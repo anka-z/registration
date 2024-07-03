@@ -36,17 +36,18 @@ const RegistrationForm = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const selectedEvent = events.find(event => event.id === parseInt(form.eventId, 10));
-    if (selectedEvent && selectedEvent.currentRegistrations >= selectedEvent.visitor_limit) {
+    console.log(selectedEvent);
+    if (selectedEvent && selectedEvent.currentregistrations >= selectedEvent.visitor_limit) {
       alert('Osiągnięto limit odwiedzających. Rejestracja nie może być przetworzona.');
       return;
     }
     await registerForEvent(form as RegistrationData);
-    setMessage('Rejestracja powiodła się!');
+    setMessage('Zarejestrowano!');
     setSubmitted(true);
   };
 
   if (submitted) {
-    return <p className="alert alert-success">{message}</p>;
+    return <p className="alert alert-success my-5">{message}</p>;
   }
 
   return (
@@ -104,9 +105,9 @@ const RegistrationForm = () => {
               <option 
                 key={event.id} 
                 value={event.id} 
-                disabled={event.currentRegistrations >= event.visitor_limit}
+                disabled={event.currentregistrations >= event.visitor_limit}
               >
-                {event.title} {event.currentRegistrations >= event.visitor_limit ? '(Limit osiągnięty)' : ''}
+                {event.title} {event.currentregistrations >= event.visitor_limit ? '(Limit osiągnięty)' : ''}
               </option>
             ))}
           </select>

@@ -15,14 +15,14 @@ export interface Event {
   start_time: string;
   description: string;
   visitor_limit: number;
-  currentRegistrations: number; 
+  currentregistrations: number; 
 }
 
 export interface EventWithRegistrations {
   eventId: number;
   title: string;
   visitorLimit: number;
-  currentRegistrations: number; 
+  currentregistrations: number; 
   registrations: Registration[];
 }
 
@@ -41,10 +41,10 @@ export async function fetchEvents(): Promise<Event[]> {
       to_char(e.start_time, 'YYYY-MM-DD, HH24:MI') as start_time, 
       e.description, 
       e.visitor_limit, 
-      COALESCE(r.currentRegistrations, 0) as currentRegistrations
+      COALESCE(r.currentregistrations, 0) as currentregistrations
     FROM events e
     LEFT JOIN (
-      SELECT event_id, COUNT(*) as currentRegistrations
+      SELECT event_id, COUNT(*) as currentregistrations
       FROM registrations
       GROUP BY event_id
     ) r ON e.id = r.event_id
@@ -58,7 +58,7 @@ export async function fetchRegistrations(): Promise<EventWithRegistrations[]> {
       e.id as event_id, 
       e.title, 
       e.visitor_limit,
-      COALESCE(r.currentRegistrations, 0) as currentRegistrations,
+      COALESCE(r.currentregistrations, 0) as currentregistrations,
       reg.id, 
       reg.name, 
       reg.surname, 
@@ -67,20 +67,20 @@ export async function fetchRegistrations(): Promise<EventWithRegistrations[]> {
     FROM events e
     LEFT JOIN registrations reg ON e.id = reg.event_id
     LEFT JOIN (
-      SELECT event_id, COUNT(*) as currentRegistrations
+      SELECT event_id, COUNT(*) as currentregistrations
       FROM registrations
       GROUP BY event_id
     ) r ON e.id = r.event_id
   `;
 
   const grouped = res.rows.reduce((acc, row) => {
-    const { event_id, title, visitor_limit, currentRegistrations, ...registration } = row;
+    const { event_id, title, visitor_limit, currentregistrations, ...registration } = row;
     if (!acc[event_id]) {
       acc[event_id] = { 
         eventId: event_id, 
         title, 
         visitorLimit: visitor_limit,
-        currentRegistrations: currentRegistrations,
+        currentregistrations: currentregistrations,
         registrations: [] 
       };
     }
