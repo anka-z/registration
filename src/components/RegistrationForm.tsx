@@ -37,7 +37,7 @@ const RegistrationForm = () => {
     e.preventDefault();
     const selectedEvent = events.find(event => event.id === parseInt(form.eventId, 10));
     if (selectedEvent && selectedEvent.currentRegistrations >= selectedEvent.visitor_limit) {
-      setMessage('Wydarzenie osiągnęło limit odwiedzających.');
+      alert('Osiągnięto limit odwiedzających. Rejestracja nie może być przetworzona.');
       return;
     }
     await registerForEvent(form as RegistrationData);

@@ -43,27 +43,24 @@ const AdminPanel = () => {
   };
 
   const handleUpdate = async (registrationId: number, updatedData: Partial<Registration>) => {
-    const event = registrations.find(event => event.registrations.some(r => r.id === registrationId));
-    
-    if (event && event.registrations.length >= event.visitorLimit) {
-      alert('Osiągnięto limit odwiedzających');
-      return;
+    try {
+      await updateRegistration(registrationId, updatedData);
+  
+      setRegistrations(prevRegistrations => {
+        let updatedRegistrations = prevRegistrations.map(event => ({
+          ...event,
+          registrations: event.registrations.map(r => 
+            r.id === registrationId ? { ...r, ...updatedData } : r
+          )
+        }));
+  
+        return updatedRegistrations;
+      });
+  
+      setEditMode({ ...editMode, [registrationId]: false });
+    } catch (error) {
+      console.error("Błąd aktualizacji rejestracji:", error);
     }
-
-    await updateRegistration(registrationId, updatedData);
-
-    setRegistrations(prevRegistrations => {
-      let updatedRegistrations = prevRegistrations.map(event => ({
-        ...event,
-        registrations: event.registrations.map(r => 
-          r.id === registrationId ? { ...r, ...updatedData } : r
-        )
-      }));
-
-      return updatedRegistrations;
-    });
-
-    setEditMode({ ...editMode, [registrationId]: false });
   };
 
   const handleEditClick = (registration: Registration) => {
