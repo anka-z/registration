@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import Link from "next/link";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import React, { useState } from "react";
