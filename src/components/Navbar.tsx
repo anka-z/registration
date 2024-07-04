@@ -21,7 +21,7 @@ const Navbar = () => {
 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div className="container-fluid">
+      <div className="container-fluid py-2 px-5">
         <Link href="/" passHref className="navbar-brand">
           MNN
         </Link>
