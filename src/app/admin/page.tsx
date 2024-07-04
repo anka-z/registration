@@ -136,107 +136,109 @@ const AdminPanel = () => {
   // }
 
   return (
-    <div className="container mt-4">
+      <>
       <Navbar />
-      <h2 className="my-5">Zarządzaj rejestracją</h2>
-      {registrations.map((event) => (
-        <div key={event.eventId} className="my-4">
-          <h3>{event.title}</h3>
-          <table className="table table-striped">
-            <thead>
-              <tr>
-                <th>Imię</th>
-                <th>Nazwisko</th>
-                <th>Email</th>
-                <th>Zarządzaj</th>
-              </tr>
-            </thead>
-            <tbody>
-              {event.registrations.map((registration) => (
-                <tr key={registration.id}>
-                  {editMode[registration.id] ? (
-                    <>
-                      <td>
-                        <input
-                          type="text"
-                          className="form-control"
-                          name="name"
-                          value={editForm[registration.id]?.name || ""}
-                          onChange={(e) => handleFormChange(e, registration.id)}
-                        />
-                      </td>
-                      <td>
-                        <input
-                          type="text"
-                          className="form-control"
-                          name="surname"
-                          value={editForm[registration.id]?.surname || ""}
-                          onChange={(e) => handleFormChange(e, registration.id)}
-                        />
-                      </td>
-                      <td>
-                        <input
-                          type="email"
-                          className="form-control"
-                          name="email"
-                          value={editForm[registration.id]?.email || ""}
-                          onChange={(e) => handleFormChange(e, registration.id)}
-                        />
-                      </td>
-                      <td>
-                        <div className="d-grid gap-2 d-md-flex">
-                          <button
-                            className="btn btn-success mr-2"
-                            onClick={() =>
-                              handleUpdate(
-                                registration.id,
-                                editForm[registration.id] || {}
-                              )
-                            }
-                          >
-                            Zapisz
-                          </button>
-                          <button
-                            className="btn btn-secondary"
-                            onClick={() => handleCancelClick(registration.id)}
-                          >
-                            Anuluj
-                          </button>
-                        </div>
-                      </td>
-                    </>
-                  ) : (
-                    <>
-                      <td>{registration.name}</td>
-                      <td>{registration.surname}</td>
-                      <td>{registration.email}</td>
-                      <td>
-                        <div className="d-grid gap-2 d-md-flex">
-                          <button
-                            className="btn btn-primary mr-2"
-                            onClick={() => handleEditClick(registration)}
-                          >
-                            Edytuj
-                          </button>
-                          <button
-                            className="btn btn-danger"
-                            onClick={() => handleDelete(registration.id)}
-                          >
-                            Usuń
-                          </button>
-                        </div>
-                      </td>
-                    </>
-                  )}
+        <div className="container mt-4">
+        <h2 className="my-5">Zarządzaj rejestracją</h2>
+        {registrations.map((event) => (
+          <div key={event.eventId} className="my-4">
+            <h3>{event.title}</h3>
+            <table className="table table-striped">
+              <thead>
+                <tr>
+                  <th>Imię</th>
+                  <th>Nazwisko</th>
+                  <th>Email</th>
+                  <th>Zarządzaj</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ))}
-      <Footer />
-    </div>
-  );
+              </thead>
+              <tbody>
+                {event.registrations.map((registration) => (
+                  <tr key={registration.id}>
+                    {editMode[registration.id] ? (
+                      <>
+                        <td>
+                          <input
+                            type="text"
+                            className="form-control"
+                            name="name"
+                            value={editForm[registration.id]?.name || ""}
+                            onChange={(e) => handleFormChange(e, registration.id)}
+                          />
+                        </td>
+                        <td>
+                          <input
+                            type="text"
+                            className="form-control"
+                            name="surname"
+                            value={editForm[registration.id]?.surname || ""}
+                            onChange={(e) => handleFormChange(e, registration.id)}
+                          />
+                        </td>
+                        <td>
+                          <input
+                            type="email"
+                            className="form-control"
+                            name="email"
+                            value={editForm[registration.id]?.email || ""}
+                            onChange={(e) => handleFormChange(e, registration.id)}
+                          />
+                        </td>
+                        <td>
+                          <div className="d-grid gap-2 d-md-flex">
+                            <button
+                              className="btn btn-success mr-2"
+                              onClick={() =>
+                                handleUpdate(
+                                  registration.id,
+                                  editForm[registration.id] || {}
+                                )
+                              }
+                            >
+                              Zapisz
+                            </button>
+                            <button
+                              className="btn btn-secondary"
+                              onClick={() => handleCancelClick(registration.id)}
+                            >
+                              Anuluj
+                            </button>
+                          </div>
+                        </td>
+                      </>
+                    ) : (
+                      <>
+                        <td>{registration.name}</td>
+                        <td>{registration.surname}</td>
+                        <td>{registration.email}</td>
+                        <td>
+                          <div className="d-grid gap-2 d-md-flex">
+                            <button
+                              className="btn btn-primary mr-2"
+                              onClick={() => handleEditClick(registration)}
+                            >
+                              Edytuj
+                            </button>
+                            <button
+                              className="btn btn-danger"
+                              onClick={() => handleDelete(registration.id)}
+                            >
+                              Usuń
+                            </button>
+                          </div>
+                        </td>
+                      </>
+                    )}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ))}
+        <Footer />
+      </div>
+      </>
+    );
 };
 
 export default AdminPanel;

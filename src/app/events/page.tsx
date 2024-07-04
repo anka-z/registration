@@ -4,10 +4,10 @@ import Footer from "@/components/Footer";
 
 export default function EventsPage() {
   return (
+    <><Navbar />
     <div className="container mt-4">
-      <Navbar />
       <EventList />
       <Footer />
-    </div>
+    </div></>
   );
 }
