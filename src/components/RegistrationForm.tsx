@@ -83,6 +83,8 @@ const RegistrationForm = () => {
         </div>
         <div className="form-group mb-3">
           <label htmlFor="email" className="form-label">Email</label>
+          <div className="input-group">
+          <div className="input-group-text">@</div>
           <input
             type="email"
             className="form-control"
@@ -93,6 +95,7 @@ const RegistrationForm = () => {
             onChange={handleChange}
             required
           />
+          </div>
         </div>
         <div className="form-group mb-3">
           <label htmlFor="eventId" className="form-label">Wydarzenie</label>
