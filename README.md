@@ -6,7 +6,7 @@ Created project using `create-next-app` with all default settings (+ enable tail
 
 # Use
 
-Prepare db:
+Prepare DB:
 ```
 CREATE TABLE events (
   id SERIAL PRIMARY KEY,
