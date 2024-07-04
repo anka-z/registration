@@ -18,8 +18,8 @@ const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container-fluid">
-        <Link href="/" passHref>
-          <a className="navbar-brand">MNN</a>
+        <Link href="/" passHref className="navbar-brand">
+          MNN
         </Link>
         <button
           className="navbar-toggler"
