@@ -12,8 +12,8 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 // Define the username and password
-const username = "admin";
-const password = "password";
+// const username = "admin";
+// const password = "password";
 
 interface EventWithRegistrations {
   eventId: number;
@@ -32,7 +32,7 @@ const AdminPanel = () => {
     [key: number]: Partial<Registration>;
   }>({});
   const [events, setEvents] = useState<Event[]>([]);
-  const [authenticated, setAuthenticated] = useState(false); // Track authentication state
+  //const [authenticated, setAuthenticated] = useState(false); // Track authentication state
 
   useEffect(() => {
     async function loadRegistrations() {
@@ -114,26 +114,26 @@ const AdminPanel = () => {
     setEditMode({ ...editMode, [registrationId]: false });
   };
 
-  const handleAuthentication = () => {
-    const enteredUsername = prompt("Nazwa użytkownika:");
-    const enteredPassword = prompt("Podaj hasło:");
+  // const handleAuthentication = () => {
+  //   const enteredUsername = prompt("Nazwa użytkownika:");
+  //   const enteredPassword = prompt("Podaj hasło:");
 
-    if (enteredUsername === username && enteredPassword === password) {
-      setAuthenticated(true);
-    } else {
-      alert("Niepoprawny login lub hasło");
-    }
-  };
+  //   if (enteredUsername === username && enteredPassword === password) {
+  //     setAuthenticated(true);
+  //   } else {
+  //     alert("Niepoprawny login lub hasło");
+  //   }
+  // };
 
   // Render authentication form if not authenticated
-  if (!authenticated) {
-    return (
-      <div className="container mt-4">
-        <h2 className="my-5">Wymagana autoryzacja</h2>
-        <button className="btn btn-success mr-2" onClick={handleAuthentication}>Zaloguj</button>
-      </div>
-    );
-  }
+  // if (!authenticated) {
+  //   return (
+  //     <div className="container mt-4">
+  //       <h2 className="my-5">Wymagana autoryzacja</h2>
+  //       <button className="btn btn-success mr-2" onClick={handleAuthentication}>Zaloguj</button>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="container mt-4">
