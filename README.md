@@ -6,9 +6,39 @@ Created project using `create-next-app` with all default settings (+ enable tail
 
 # Use
 
-Fork repository. Then:
+Prepare db:
+```
+CREATE TABLE events (
+  id SERIAL PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  start_time TIMESTAMP NOT NULL,
+  description TEXT,
+  visitor_limit INT NOT NULL DEFAULT 20
+);
 
-Run locally
+CREATE TABLE registrations (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  surname VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  event_id INT NOT NULL,
+  FOREIGN KEY (event_id) REFERENCES events(id)
+);
+```
+
+Prepare .env.local with the files from Vercel
+```
+POSTGRES_URL="postgres://default:hAtiOFj5rn6N@ep-steep-night-a4s6lhk6-pooler.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require"
+POSTGRES_PRISMA_URL="postgres://default:hAtiOFj5rn6N@ep-steep-night-a4s6lhk6-pooler.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require&pgbouncer=true&connect_timeout=15"
+POSTGRES_URL_NO_SSL="postgres://default:hAtiOFj5rn6N@ep-steep-night-a4s6lhk6-pooler.us-east-1.aws.neon.tech:5432/verceldb"
+POSTGRES_URL_NON_POOLING="postgres://default:hAtiOFj5rn6N@ep-steep-night-a4s6lhk6.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require"
+POSTGRES_USER="default"
+POSTGRES_HOST="ep-steep-night-a4s6lhk6-pooler.us-east-1.aws.neon.tech"
+POSTGRES_PASSWORD="{password}"
+POSTGRES_DATABASE="verceldb"
+```
+
+Run
 
     nmp install
     npm run dev
@@ -18,32 +48,3 @@ Build
     npm run build
     npm start
 
-## Connect DB
-
-- publish repo
-- link it in vercel (new project linked to that repo) and deploy
-
-### create db in Vercel
-
-- go to Storage and create Database (Postgres)
-- get connection to it - go to .env.local and copy its content (first click on show secret!)
-- paste it into `.env.local` file in a root directory
-
-### link db in Vercel
-
-- go to your project
-- go to "Storage tab"
-- clink "connect" on the corresponding db
-- done :)
-
-# Troubleshooting
-
-## Not setting up db in vercel
-
-You will get an error during deployment as:
-
-    [VercelPostgresError]: VercelPostgresError - 'missing_connection_string': You did not supply a 'connectionString' and no 'POSTGRES_URL' env var was found.
-
-Fix: follow "link db in Vercel" step.
-
-Then click on failed deployment "redeploy" button
