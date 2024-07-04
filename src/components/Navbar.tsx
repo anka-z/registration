@@ -1,10 +1,15 @@
 'use client';
-import Link from "next/link";
-import "bootstrap/dist/js/bootstrap.bundle.min.js";
-import React, { useState } from "react";
+
+import Link from 'next/link';
+import React, { useEffect, useState } from 'react';
 
 const Navbar = () => {
   const [isCollapsed, setIsCollapsed] = useState(true);
+
+  useEffect(() => {
+    // Load Bootstrap JavaScript dynamically on the client side
+    import('bootstrap/dist/js/bootstrap.bundle.min.js');
+  }, []);
 
   const toggleCollapse = () => {
     setIsCollapsed(!isCollapsed);
@@ -13,9 +18,9 @@ const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container-fluid">
-        <a className="navbar-brand" href="/">
-          MNN
-        </a>
+        <Link href="/" passHref>
+          <a className="navbar-brand">MNN</a>
+        </Link>
         <button
           className="navbar-toggler"
           type="button"
@@ -27,7 +32,7 @@ const Navbar = () => {
           <span className="navbar-toggler-icon"></span>
         </button>
         <div
-          className={`collapse navbar-collapse ${isCollapsed ? "" : "show"}`}
+          className={`collapse navbar-collapse ${isCollapsed ? '' : 'show'}`}
           id="navbarNav"
         >
           <ul className="navbar-nav ml-auto">
