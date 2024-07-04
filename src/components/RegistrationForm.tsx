@@ -47,53 +47,57 @@ const RegistrationForm = () => {
   };
 
   if (submitted) {
-    return <div className="alert alert-success my-5" role="alert">{message}</div>;
+    return <><div className="alert alert-success my-5 col-4" role="alert">{message}</div>
+    <a href={`/register/`} className="alert alert-primary link-underline link-underline-opacity-0 my-5 col-4" role="alert">Zarejestruj ponownie</a></>;
   }
 
   return (
-    <div className="container">
+    <div className="container-fluid">
       <h2 className="my-5">Formularz rejestracji</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="name">Imię</label>
+      <form className="col-6" onSubmit={handleSubmit}>
+        <div className="form-group mb-3">
+          <label htmlFor="name" className="form-label">Imię</label>
           <input
             type="text"
             className="form-control"
             id="name"
             name="name"
+            placeholder="Imię"
             value={form.name}
             onChange={handleChange}
             required
           />
         </div>
-        <div className="form-group">
-          <label htmlFor="surname">Nazwisko</label>
+        <div className="form-group mb-3">
+          <label htmlFor="surname" className="form-label">Nazwisko</label>
           <input
             type="text"
             className="form-control"
             id="surname"
             name="surname"
+            placeholder="Nazwisko"
             value={form.surname}
             onChange={handleChange}
             required
           />
         </div>
-        <div className="form-group">
-          <label htmlFor="email">Email</label>
+        <div className="form-group mb-3">
+          <label htmlFor="email" className="form-label">Email</label>
           <input
             type="email"
             className="form-control"
             id="email"
             name="email"
+            placeholder="Adres email"
             value={form.email}
             onChange={handleChange}
             required
           />
         </div>
-        <div className="form-group">
-          <label htmlFor="eventId">Wydarzenie</label>
+        <div className="form-group mb-3">
+          <label htmlFor="eventId" className="form-label">Wydarzenie</label>
           <select
-            className="form-control"
+            className="form-control form-select"
             id="eventId"
             name="eventId"
             value={form.eventId}
@@ -111,8 +115,11 @@ const RegistrationForm = () => {
               </option>
             ))}
           </select>
+          <div id="emailHelp" className="form-text">Liczba miejsc jest ograniczona</div>
         </div>
-        <button type="submit" className="btn btn-primary">Zarejestruj</button>
+        <div className="col-12">
+          <button type="submit" className="btn btn-primary">Zarejestruj</button>
+        </div>
       </form>
     </div>
   );
