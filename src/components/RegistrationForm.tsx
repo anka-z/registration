@@ -11,16 +11,17 @@ interface FormState {
 }
 
 const RegistrationForm = () => {
-  const [events, setEvents] = useState<Event[]>([]);
+  const [events, setEvents] = useState<Event[]>([]); // Store the list of events
   const [form, setForm] = useState<FormState>({
     name: '',
     surname: '',
     email: '',
     eventId: ''
-  });
-  const [message, setMessage] = useState('');
-  const [submitted, setSubmitted] = useState(false);
+  }); // Store the form data
+  const [message, setMessage] = useState(''); // Store the message to display after form submission
+  const [submitted, setSubmitted] = useState(false); // Track if the form has been submitted
 
+  // Effect to fetch events data when the component mounts
   useEffect(() => {
     async function loadEvents() {
       const data: Event[] = await fetchEvents();
@@ -29,10 +30,12 @@ const RegistrationForm = () => {
     loadEvents();
   }, []);
 
+  // Handler to update form state when input fields change
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  // Handler to manage form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const selectedEvent = events.find(event => event.id === parseInt(form.eventId, 10));
@@ -46,11 +49,13 @@ const RegistrationForm = () => {
     setSubmitted(true);
   };
 
+  // If the form has been submitted, display a success message
   if (submitted) {
     return <><div className="alert alert-success my-5 col-4" role="alert">{message}</div>
     <a href={`/register/`} className="alert alert-primary link-underline link-underline-opacity-0 my-5 col-4" role="alert">Zarejestruj ponownie</a></>;
   }
 
+  // Render the registration form
   return (
     <div className="container-fluid">
       <h2 className="my-5">Formularz rejestracji</h2>

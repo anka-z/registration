@@ -12,8 +12,8 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 // Define the username and password
-// const username = "admin";
-// const password = "password";
+const username = "admin";
+const password = "password";
 
 interface EventWithRegistrations {
   eventId: number;
@@ -26,14 +26,15 @@ interface EventWithRegistrations {
 const AdminPanel = () => {
   const [registrations, setRegistrations] = useState<EventWithRegistrations[]>(
     []
-  );
-  const [editMode, setEditMode] = useState<{ [key: number]: boolean }>({});
+  ); // Store the list of registations
+  const [editMode, setEditMode] = useState<{ [key: number]: boolean }>({}); // Track edit mode
   const [editForm, setEditForm] = useState<{
-    [key: number]: Partial<Registration>;
-  }>({});
-  const [events, setEvents] = useState<Event[]>([]);
-  //const [authenticated, setAuthenticated] = useState(false); // Track authentication state
+    [key: number]: Partial<Registration>; 
+  }>({}); // Store the form data
+  const [events, setEvents] = useState<Event[]>([]); // Store the list of events
+  const [authenticated, setAuthenticated] = useState(false); // Track authentication state
 
+  // Effect to fetch registartions and events data when the component mounts
   useEffect(() => {
     async function loadRegistrations() {
       const data: EventWithRegistrations[] = await fetchRegistrations();
@@ -47,6 +48,7 @@ const AdminPanel = () => {
     loadEvents();
   }, []);
 
+  // Handler to delete a registration by ID
   const handleDelete = async (registrationId: number) => {
     await deleteRegistration(registrationId);
     setRegistrations((prevRegistrations) =>
@@ -59,6 +61,7 @@ const AdminPanel = () => {
     );
   };
 
+  // Handler to update a registration by ID
   const handleUpdate = async (
     registrationId: number,
     updatedData: Partial<Registration>
@@ -83,6 +86,7 @@ const AdminPanel = () => {
     }
   };
 
+  // Handler to handle edit click
   const handleEditClick = (registration: Registration) => {
     setEditForm({
       ...editForm,
@@ -96,6 +100,7 @@ const AdminPanel = () => {
     setEditMode({ ...editMode, [registration.id]: true });
   };
 
+  // Handler to handle form change
   const handleFormChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
     registrationId: number
@@ -110,31 +115,34 @@ const AdminPanel = () => {
     }));
   };
 
+  // Handler to handle cancel click
   const handleCancelClick = (registrationId: number) => {
     setEditMode({ ...editMode, [registrationId]: false });
   };
 
-  // const handleAuthentication = () => {
-  //   const enteredUsername = prompt("Nazwa użytkownika:");
-  //   const enteredPassword = prompt("Podaj hasło:");
+  // Handler to authenticate the user
+  const handleAuthentication = () => {
+    const enteredUsername = prompt("Nazwa użytkownika:");
+    const enteredPassword = prompt("Podaj hasło:");
 
-  //   if (enteredUsername === username && enteredPassword === password) {
-  //     setAuthenticated(true);
-  //   } else {
-  //     alert("Niepoprawny login lub hasło");
-  //   }
-  // };
+    if (enteredUsername === username && enteredPassword === password) {
+      setAuthenticated(true);
+    } else {
+      alert("Niepoprawny login lub hasło");
+    }
+  };
 
   // Render authentication form if not authenticated
-  // if (!authenticated) {
-  //   return (
-  //     <div className="container mt-4">
-  //       <h2 className="my-5">Wymagana autoryzacja</h2>
-  //       <button className="btn btn-success mr-2" onClick={handleAuthentication}>Zaloguj</button>
-  //     </div>
-  //   );
-  // }
+  if (!authenticated) {
+    return (
+      <div className="container mt-4">
+        <h2 className="my-5">Wymagana autoryzacja</h2>
+        <button className="btn btn-success mr-2" onClick={handleAuthentication}>Zaloguj</button>
+      </div>
+    );
+  }
 
+  // Render the admin panel if authenticated
   return (
       <>
       <Navbar />

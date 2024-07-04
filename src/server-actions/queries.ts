@@ -73,6 +73,7 @@ export async function fetchRegistrations(): Promise<EventWithRegistrations[]> {
     ) r ON e.id = r.event_id
   `;
 
+  // Group registrations by event
   const grouped = res.rows.reduce((acc, row) => {
     const { event_id, title, visitor_limit, currentregistrations, ...registration } = row;
     if (!acc[event_id]) {
