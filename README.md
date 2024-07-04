@@ -48,3 +48,7 @@ Build
     npm run build
     npm start
 
+Admin panel "authentication"
+
+    admin
+    password
