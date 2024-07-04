@@ -32,7 +32,7 @@ const Navbar = () => {
           <span className="navbar-toggler-icon"></span>
         </button>
         <div
-          className={`collapse navbar-collapse ${isCollapsed ? '' : 'show'}`}
+          className={`justify-content-end collapse navbar-collapse ${isCollapsed ? '' : 'show'}`}
           id="navbarNav"
         >
           <ul className="navbar-nav ml-auto">
