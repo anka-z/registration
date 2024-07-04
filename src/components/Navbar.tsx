@@ -2,6 +2,8 @@
 
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
+import clsx from 'clsx';
 
 const Navbar = () => {
   const [isCollapsed, setIsCollapsed] = useState(true);
@@ -14,6 +16,8 @@ const Navbar = () => {
   const toggleCollapse = () => {
     setIsCollapsed(!isCollapsed);
   };
+
+  const pathname = usePathname();
 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -37,22 +41,42 @@ const Navbar = () => {
         >
           <ul className="navbar-nav ml-auto">
             <li className="nav-item">
-              <Link className="nav-link" href="/">
+              <Link className={clsx(
+                'nav-link',
+                {
+                  'nav-link active': pathname === '/',
+                },
+              )} href="/">
                 Home
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" href="/events">
+              <Link className={clsx(
+                'nav-link',
+                {
+                  'nav-link active': pathname === '/events',
+                },
+              )} href="/events">
                 Wydarzenia
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" href="/register">
+              <Link className={clsx(
+                'nav-link',
+                {
+                  'nav-link active': pathname === '/register',
+                },
+              )} href="/register">
                 Rejestracja
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" href="/admin">
+              <Link className={clsx(
+                'nav-link',
+                {
+                  'nav-link active': pathname === '/admin',
+                },
+              )} href="/admin">
                 Admin
               </Link>
             </li>
